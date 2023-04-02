@@ -28,7 +28,7 @@ function renderPhotographHeader(object) {
   const mainEl = document.querySelector("main");
   mainEl.innerHTML += photographHeader;
 }
-
+ 
 function renderDropdown() {
   // Create the HTML for the dropdown menu
   const dropdownHtml = `

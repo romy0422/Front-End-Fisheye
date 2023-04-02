@@ -11,4 +11,4 @@ export async function getPhotographerMedia() {
   return media.filter(
     (mediaItem) => mediaItem.photographerId === photographerId
   );
-}
+} 
