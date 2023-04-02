@@ -26,7 +26,7 @@ export function mediaFactory(data) {
         </section>
       `;
       }
-  
+    
       // If the media is a video add the appropriate media card html to the article element
       if (video) {
         article.innerHTML = `
