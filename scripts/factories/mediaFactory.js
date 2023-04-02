@@ -17,11 +17,6 @@ export function mediaFactory(data) {
         </button>
         <section class="media-card-info">
           <h2 class="media-card-title">${title}</h2>
-          <div class="media-like-container">
-            <span class="media-like-count">${likes}</span>
-            <button class="media-like-button" aria-label="Bouton de likes">
-              <i class="media-like-logo fa-heart fa-regular"></i>
-            </button>
           </div>
         </section>
       `;
@@ -36,12 +31,7 @@ export function mediaFactory(data) {
           </video>
         </button>
         <section class="media-card-info">
-          <h2 class="media-card-title">${title}</h2>
-          <div class="media-like-container">
-            <span class="media-like-count">${likes}</span>
-            <button class="media-like-button" aria-label="Bouton de likes">
-            <i class="media-like-logo fa-heart fa-regular"></i>
-            </button>
+          <h2 class="media-card-title">${title}</h2>>
           </div>
         </section>
       `;

@@ -31,9 +31,10 @@ function renderPhotographHeader(object) {
  
 function renderDropdown() {
   // Create the HTML for the dropdown menu
+  
   const dropdownHtml = `
+  <h1 class="photograph-tagline">Trié part</h1>
     <select class="dropdown" id="dropdownMenu" aria-label="Menu de tri">
-      <option class="dropdown-options" value=""> Trier par </option>
       <option class="dropdown-options" value="Popularité">Popularité</option>
       <option class="dropdown-options" value="Date">Date</option>
       <option class="dropdown-options" value="Titre">Titre</option>
