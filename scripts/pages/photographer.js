@@ -1,6 +1,7 @@
 import { mediaFactory } from "../factories/mediaFactory.js";
 import { getPhotographerInfo } from "../utils/getPhotographerInfo.js";
 import { getPhotographerMedia } from "../utils/getPhotographerMedia.js";
+import { displayModal, closeModal } from "../utils/displayCloseModal.js";
 // Fetch photographer info object
 const photographerInfo = await getPhotographerInfo();
 
@@ -40,11 +41,11 @@ function renderDropdown() {
       <option class="dropdown-options" value="Titre">Titre</option>
     </select> </div>
   `;
-
   // Add the dropdown HTML to the main element
   const mainEl = document.querySelector("main");
   mainEl.innerHTML += dropdownHtml;
 }
+
 
 function renderMediaSection(array) {
   // Create a new div element to hold the media cards
@@ -65,6 +66,92 @@ function renderMediaSection(array) {
     mediaSection.append(mediaCardDOM);
   });
 }
+
+function renderPhotographFooter(object) {
+  // Destructuring the photographer info object to extract the photographer price
+  const { price } = object;
+
+  // Calculate total media likes count and store it in a variable
+  const mediaLikeCount = document.querySelectorAll(".media-like-count");
+  let totalMediaLikeCount = 0;
+
+  mediaLikeCount.forEach((media) => {
+    totalMediaLikeCount += Number(media.textContent);
+  });
+
+  // Create the HTML for the footer section
+  const photographFooter = `
+    <aside class="footer">
+      <div class="footer-container">
+        <span class="footer-likes" id="totalLikesCount">${totalMediaLikeCount}</span>
+        <i class="fa-solid fa-heart"></i>
+      </div>
+      <p>${price} € / jour</p>
+    </aside>
+  `;
+
+  // Add the footer section HTML to the footer element
+  const footerEl = document.querySelector("footer");
+  footerEl.innerHTML = photographFooter;
+}
+
+
+function insertPhotographName(object) {
+  // Destructuring the photographer info object to extract the name property
+  const { name } = object;
+
+  // Add the photographer name to the modalTitle element
+  const modalTitle = document.querySelector(".modal-title");
+  modalTitle.innerHTML = `Contactez-moi<br>${name}`;
+}
+
+function validateModalForm(event) {
+  // Prevent the default form submission
+  event.preventDefault();
+
+  // Get the elements of the modal form & its inputs
+  const modalForm = document.getElementById("modalForm");
+  const firstName = document.getElementById("firstName");
+  const lastName = document.getElementById("lastName");
+  const email = document.getElementById("email");
+  const message = document.getElementById("message");
+
+  // Check if the form input data is valid & console.log the data as an object
+  if (modalForm.checkValidity()) {
+    console.log({
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      message: message.value,
+    });
+    modalForm.reset();
+    closeModal("contactModal");
+  }
+};
+
+
+function addEventListeners() {
+  // Add an event listener to the dropdown menu to sort the media section on change
+  const dropdownMenu = document.getElementById("dropdownMenu");
+
+
+  // Add an event listener to the contact button to open the contact modal on click
+  const contactBtn = document.getElementById("contactBtn");
+  contactBtn.addEventListener("click", () => {
+    displayModal("contactModal");
+  });
+
+  // Add an event listener to the close button in the modal to close the contact modal on click
+  const modalCloseBtn = document.getElementById("modalCloseBtn");
+  modalCloseBtn.addEventListener("click", () => {
+    closeModal("contactModal");
+  });
+
+  // Add an event listener to validate the contact modal form on submit
+  const modalForm = document.getElementById("modalForm");
+  modalForm.addEventListener("submit", validateModalForm);
+};
+
 
 async function renderPhotographMediaPage() {
   // Render the header section of the page with the photographer's name, location, tagline, and portrait
