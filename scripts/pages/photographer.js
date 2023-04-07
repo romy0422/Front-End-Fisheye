@@ -2,11 +2,15 @@ import { mediaFactory } from "../factories/mediaFactory.js";
 import { getPhotographerInfo } from "../utils/getPhotographerInfo.js";
 import { getPhotographerMedia } from "../utils/getPhotographerMedia.js";
 import { displayModal, closeModal } from "../utils/displayCloseModal.js";
+
 // Fetch photographer info object
 const photographerInfo = await getPhotographerInfo();
 
 // Fetch photographer media array
 const photographerMedia = await getPhotographerMedia();
+
+// Initialize a variable that will contain the current lightbox media id
+let currentLightboxMediaId = 0;
 
 function renderPhotographHeader(object) {
   // Destructuring the photographer info object to extract to extract its properties
@@ -29,23 +33,22 @@ function renderPhotographHeader(object) {
   const mainEl = document.querySelector("main");
   mainEl.innerHTML += photographHeader;
 }
- 
+
 function renderDropdown() {
   // Create the HTML for the dropdown menu
-  
-  const dropdownHtml = `<div class="test">
-  <h1 class="photograph-tagline">Trié part</h1>
+  const dropdownHtml = `
+  <h2 class="test"> Trier par </h2>
     <select class="dropdown" id="dropdownMenu" aria-label="Menu de tri">
       <option class="dropdown-options" value="Popularité">Popularité</option>
       <option class="dropdown-options" value="Date">Date</option>
       <option class="dropdown-options" value="Titre">Titre</option>
-    </select> </div>
+    </select>
   `;
+
   // Add the dropdown HTML to the main element
   const mainEl = document.querySelector("main");
   mainEl.innerHTML += dropdownHtml;
 }
-
 
 function renderMediaSection(array) {
   // Create a new div element to hold the media cards
@@ -71,20 +74,13 @@ function renderPhotographFooter(object) {
   // Destructuring the photographer info object to extract the photographer price
   const { price } = object;
 
-  // Calculate total media likes count and store it in a variable
-  const mediaLikeCount = document.querySelectorAll(".media-like-count");
-  let totalMediaLikeCount = 0;
-
-  mediaLikeCount.forEach((media) => {
-    totalMediaLikeCount += Number(media.textContent);
-  });
 
   // Create the HTML for the footer section
   const photographFooter = `
     <aside class="footer">
       <div class="footer-container">
-        <span class="footer-likes" id="totalLikesCount">${totalMediaLikeCount}</span>
-        <i class="fa-solid fa-heart"></i>
+        <span class="footer-likes" id="totalLikesCount"></span>
+      
       </div>
       <p>${price} € / jour</p>
     </aside>
@@ -94,7 +90,6 @@ function renderPhotographFooter(object) {
   const footerEl = document.querySelector("footer");
   footerEl.innerHTML = photographFooter;
 }
-
 
 function insertPhotographName(object) {
   // Destructuring the photographer info object to extract the name property
@@ -127,12 +122,96 @@ function validateModalForm(event) {
     modalForm.reset();
     closeModal("contactModal");
   }
-};
+}
 
+async function renderLightBoxMedia(mediaId) {
+  // Get the media object for the specified media id
+  const mediaObject = await photographerMedia.find(
+    (media) => media.id == mediaId
+  );
+
+  // Update the currentMediaId variable with the current lightbox media id
+  currentLightboxMediaId = mediaId;
+
+  // Destructuring the media object to extract its properties
+  const { title, photographerId, image, video } = mediaObject;
+
+  // Get the lightboxMedia element
+  const lightboxMedia = document.getElementById("lightboxMedia");
+
+  // If the media is an image add the appropriate media card html to the lightboxMedia element
+  if (image) {
+    lightboxMedia.innerHTML = `
+      <img class="lightbox-img" src="assets/images/${photographerId}/${image}" alt="${title}">
+      <figcaption class="lightbox-caption">${title}</figcaption>
+  `;
+  }
+
+  // If the media is a video add the appropriate media card html to the lightboxMedia element
+  if (video) {
+    lightboxMedia.innerHTML = `
+      <video class="lightbox-video" title="${title}" controls>
+        <source src="assets/images/${photographerId}/${video}" type="video/mp4">
+      </video>
+      <figcaption class="lightbox-caption">${title}</figcaption>
+  `;
+  }
+}
+
+function nextLightBoxMedia() {
+  // Find the index of the current media item in the photographerMedia array
+  const currentIndex = photographerMedia.findIndex(
+    (media) => media.id == currentLightboxMediaId
+  );
+
+  // If the current media item is not the last item in the array, display the next item
+  if (currentIndex < photographerMedia.length - 1) {
+    const nextMediaId = photographerMedia[currentIndex + 1].id;
+    renderLightBoxMedia(nextMediaId);
+    // Else display the first item of the array
+  } else {
+    const nextMediaId = photographerMedia[0].id;
+    renderLightBoxMedia(nextMediaId);
+  }
+}
+
+function previousLightBoxMedia() {
+  // Find the index of the current media item in the photographerMedia array
+  const currentIndex = photographerMedia.findIndex(
+    (media) => media.id == currentLightboxMediaId
+  );
+
+  // If the current media item is not the first item in the array, display the previous item
+  if (currentIndex > 0) {
+    const previousMediaId = photographerMedia[currentIndex - 1].id;
+    renderLightBoxMedia(previousMediaId);
+    // Else display the last item of the array
+  } else {
+    const previousMediaId = photographerMedia[photographerMedia.length - 1].id;
+    renderLightBoxMedia(previousMediaId);
+  }
+
+  // Remove the existing media section
+  const mediaSection = document.querySelector(".media-section");
+  mediaSection.remove();
+
+  // Render the media article section using the sorted photographerMedia array
+  renderMediaSection(photographerMedia);
+
+  // Add an event listener to each media card button to open the lightbox modal on click
+  const mediaCardButtons = document.querySelectorAll(".media-card-button");
+  mediaCardButtons.forEach((card) => {
+    card.addEventListener("click", () => {
+      const mediaId = card.parentElement.id;
+      renderLightBoxMedia(mediaId);
+      displayModal("lightboxModal");
+    });
+  });
+
+
+}
 
 function addEventListeners() {
-  // Add an event listener to the dropdown menu to sort the media section on change
-  const dropdownMenu = document.getElementById("dropdownMenu");
 
 
   // Add an event listener to the contact button to open the contact modal on click
@@ -150,15 +229,68 @@ function addEventListeners() {
   // Add an event listener to validate the contact modal form on submit
   const modalForm = document.getElementById("modalForm");
   modalForm.addEventListener("submit", validateModalForm);
-};
+
+  // Add an event listener to each media card button to open the lightbox modal on click
+  const mediaCardButtons = document.querySelectorAll(".media-card-button");
+  mediaCardButtons.forEach((card) => {
+    card.addEventListener("click", () => {
+      const mediaId = card.parentElement.id;
+      renderLightBoxMedia(mediaId);
+      displayModal("lightboxModal");
+    });
+  });
+
+  // Add an event listener to the close button in the lightbox modal to close the modal on click
+  const lightboxCloseBtn = document.getElementById("lightboxCloseBtn");
+  lightboxCloseBtn.addEventListener("click", () => {
+    closeModal("lightboxModal");
+  });
+
+  // Add an event listener to the previous button in the lightbox modal to switch to the previous media on click
+  const previousBtn = document.getElementById("lightboxPreviousBtn");
+  previousBtn.addEventListener("click", previousLightBoxMedia);
+
+  // Add an event listener to the next button in the lightbox modal to switch to the next media on click
+  const nextBtn = document.getElementById("lightboxNextBtn");
+  nextBtn.addEventListener("click", nextLightBoxMedia);
+
+  // Add an event listener to lightboxModal to switch to the previous/next media on press of left/right arrow keys
+  document.addEventListener("keydown", (event) => {
+    // Get the lightboxModal element
+    const lightboxModal = document.getElementById("lightboxModal");
+
+    // If lightboxModal is open & the left arrow key is pressed, call the previousLightBoxMedia function
+    if (lightboxModal.open && event.key === "ArrowLeft") {
+      previousLightBoxMedia();
+    }
+
+    // If lightboxModal is open & the right arrow key is pressed, call the nextLightBoxMedia function
+    if (lightboxModal.open && event.key === "ArrowRight") {
+      nextLightBoxMedia();
+    }
+  });
+
+  // Add an event listener to the contact & lightbox modal to close the modal on press of ESC button
+  document.addEventListener("keydown", (event) => {
+    // If lightboxModal is open & the ESC key is pressed, call the closeModal function
+    const lightboxModal = document.getElementById("lightboxModal");
+    if (lightboxModal.open && event.key === "Escape") {
+      closeModal("lightboxModal");
+    }
+
+    // If contactModal is open & the ESC key is pressed, call the closeModal function
+    const contactModal = document.getElementById("contactModal");
+    if (contactModal.open && event.key === "Escape") {
+      closeModal("contactModal");
+    }
+  });
+}
 
 
 async function renderPhotographMediaPage() {
   // Render the header section of the page with the photographer's name, location, tagline, and portrait
   await renderPhotographHeader(photographerInfo);
 
-  // Render the dropdown menu
-  await renderDropdown();
 
   // Render the media section of the page with cards for each media item
   await renderMediaSection(photographerMedia);

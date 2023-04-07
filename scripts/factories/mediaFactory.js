@@ -21,7 +21,7 @@ export function mediaFactory(data) {
         </section>
       `;
       }
-     
+  
       // If the media is a video add the appropriate media card html to the article element
       if (video) {
         article.innerHTML = `
@@ -31,7 +31,7 @@ export function mediaFactory(data) {
           </video>
         </button>
         <section class="media-card-info">
-          <h2 class="media-card-title">${title}</h2>>
+          <h2 class="media-card-title">${title}</h2>
           </div>
         </section>
       `;
