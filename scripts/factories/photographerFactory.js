@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 function photographerFactory(data) {
   // Destructuring the data object to extract its properties
   const { name, id, city, country, tagline, price, portrait } = data;

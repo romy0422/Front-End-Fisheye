@@ -1,6 +1,6 @@
 export function mediaFactory(data) {
     // Destructuring the data object to extract its properties
-    const { id, photographerId, title, image, video, likes } = data;
+    const { id, photographerId, title, image, video, } = data;
   
     // Defining a function that will return a DOM element for the media card
     function getMediaCardDOM() {
@@ -10,10 +10,10 @@ export function mediaFactory(data) {
       article.id = id;
   
       // If the media is an image add the appropriate media card html to the article element
-      if (image) {
+    if (image) {
         article.innerHTML = `
-        <button class="media-card-button" aria-label="Bouton d'ouverture de lightbox">
-          <img class="media-card-img" src="assets/images/${photographerId}/${image}" alt="${title}">
+    <button class="media-card-button" aria-label="Bouton d'ouverture de lightbox">
+    <img class="media-card-img" src="assets/images/${photographerId}/${image}" alt="${title}">
         </button>
         <section class="media-card-info">
           <h2 class="media-card-title">${title}</h2>
