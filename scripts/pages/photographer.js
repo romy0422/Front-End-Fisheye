@@ -37,8 +37,8 @@ function renderPhotographHeader(object) {
 function renderDropdown() {
   // Create the HTML for the dropdown menu
   const dropdownHtml = `
-  <h2 class="test"> Trier par </h2>
     <select class="dropdown" id="dropdownMenu" aria-label="Menu de tri">
+      <option class="dropdown-options" value=""> Trier par </option>
       <option class="dropdown-options" value="Popularité">Popularité</option>
       <option class="dropdown-options" value="Date">Date</option>
       <option class="dropdown-options" value="Titre">Titre</option>
@@ -74,13 +74,20 @@ function renderPhotographFooter(object) {
   // Destructuring the photographer info object to extract the photographer price
   const { price } = object;
 
+  // Calculate total media likes count and store it in a variable
+  const mediaLikeCount = document.querySelectorAll(".media-like-count");
+  let totalMediaLikeCount = 0;
+
+  mediaLikeCount.forEach((media) => {
+    totalMediaLikeCount += Number(media.textContent);
+  });
 
   // Create the HTML for the footer section
   const photographFooter = `
     <aside class="footer">
       <div class="footer-container">
-        <span class="footer-likes" id="totalLikesCount"></span>
-      
+        <span class="footer-likes" id="totalLikesCount">${totalMediaLikeCount}</span>
+        <i class="fa-solid fa-heart"></i>
       </div>
       <p>${price} € / jour</p>
     </aside>
@@ -190,6 +197,78 @@ function previousLightBoxMedia() {
     const previousMediaId = photographerMedia[photographerMedia.length - 1].id;
     renderLightBoxMedia(previousMediaId);
   }
+}
+
+function renderLikes() {
+  // Get the media like span element
+  const mediaLikeSpanEl = this.parentNode.firstElementChild;
+
+  // Get the media like icon element
+  const mediaLikeIconEl = this.firstElementChild;
+
+  if (mediaLikeIconEl.classList.contains("fa-regular")) {
+    // Convert media like span content to a number and store it as mediaLikeCount variable
+    let mediaLikeCount = Number(mediaLikeSpanEl.textContent);
+
+    // Increment the mediaLikeCount variable
+    mediaLikeCount++;
+
+    // Define the mediaLikeCount value as media likes span element new content
+    mediaLikeSpanEl.textContent = mediaLikeCount;
+
+    // Render the photographer footer to recalculate the total likes count
+    renderPhotographFooter(photographerInfo);
+
+    // Replace the fa-regular with the fa-solid class
+    mediaLikeIconEl.classList.replace("fa-regular", "fa-solid");
+  } else if (mediaLikeIconEl.classList.contains("fa-solid")) {
+    // Convert media like span content to a number and store it as mediaLikeCount variable
+    let mediaLikeCount = Number(mediaLikeSpanEl.textContent);
+
+    // Decrease the mediaLikeCount variable
+    mediaLikeCount--;
+
+    // Define the mediaLikeCount value as media likes span element new content
+    mediaLikeSpanEl.textContent = mediaLikeCount;
+
+    // Render the photographer footer to recalculate the total likes count
+    renderPhotographFooter(photographerInfo);
+
+    // Replace the fa-solid with the fa-regular class
+    mediaLikeIconEl.classList.replace("fa-solid", "fa-regular");
+  }
+}
+
+async function sortMediaSection() {
+  // Retrieve the selected option value
+  const selectedOption = this.value;
+
+  // Sort the photographerMedia array using the likes key if the selected option is "Popularité"
+  if (selectedOption == "Popularité") {
+    await photographerMedia.sort((a, b) => {
+      return b.likes - a.likes;
+    });
+  }
+
+  // Sort the photographerMedia array using the date key if the selected option is "Date"
+  if (selectedOption == "Date") {
+    await photographerMedia.sort((a, b) => {
+      return new Date(a.date) - new Date(b.date);
+    });
+  }
+
+  // Sort the photographerMedia array using the title key if the selected option is "Titre"
+  if (selectedOption == "Titre") {
+    await photographerMedia.sort((a, b) => {
+      if (a.title < b.title) {
+        return -1;
+      }
+      if (a.title > b.title) {
+        return 1;
+      }
+      return 0;
+    });
+  }
 
   // Remove the existing media section
   const mediaSection = document.querySelector(".media-section");
@@ -208,11 +287,17 @@ function previousLightBoxMedia() {
     });
   });
 
-
+  // Add an event listener to each media card like button to execute the renderLikes function on click
+  const mediaCardLikeButtons = document.querySelectorAll(".media-like-button");
+  mediaCardLikeButtons.forEach((button) => {
+    button.addEventListener("click", renderLikes);
+  });
 }
 
 function addEventListeners() {
-
+  // Add an event listener to the dropdown menu to sort the media section on change
+  const dropdownMenu = document.getElementById("dropdownMenu");
+  dropdownMenu.addEventListener("change", sortMediaSection);
 
   // Add an event listener to the contact button to open the contact modal on click
   const contactBtn = document.getElementById("contactBtn");
@@ -238,6 +323,12 @@ function addEventListeners() {
       renderLightBoxMedia(mediaId);
       displayModal("lightboxModal");
     });
+  });
+
+  // Add an event listener to each media card like button to execute the renderLikes function on click
+  const mediaCardLikeButtons = document.querySelectorAll(".media-like-button");
+  mediaCardLikeButtons.forEach((button) => {
+    button.addEventListener("click", renderLikes);
   });
 
   // Add an event listener to the close button in the lightbox modal to close the modal on click
@@ -286,11 +377,12 @@ function addEventListeners() {
   });
 }
 
-
 async function renderPhotographMediaPage() {
   // Render the header section of the page with the photographer's name, location, tagline, and portrait
   await renderPhotographHeader(photographerInfo);
 
+  // Render the dropdown menu
+  await renderDropdown();
 
   // Render the media section of the page with cards for each media item
   await renderMediaSection(photographerMedia);

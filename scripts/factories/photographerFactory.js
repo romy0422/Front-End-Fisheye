@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-function photographerFactory(data) {
+export function photographerFactory(data) {
   // Destructuring the data object to extract its properties
   const { name, id, city, country, tagline, price, portrait } = data;
 
@@ -7,7 +6,7 @@ function photographerFactory(data) {
   const picture = `assets/photographers/${portrait}`;
 
   // Defining a function that will return a DOM element for the photographer card
-  function getUserCardDOM() {
+  function getPhotographerCardDOM() {
     // Create an article element to contain the photographer card
     const article = document.createElement("article");
     article.className += "photographer-card";
@@ -62,5 +61,5 @@ function photographerFactory(data) {
   }
 
   // Returning an object with the name and picture properties and the getPhotographerCardDOM function
-  return { name, picture, getUserCardDOM };
+  return { name, picture, getPhotographerCardDOM };
 }
