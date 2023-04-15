@@ -1,4 +1,5 @@
-export function photographerFactory(data) {
+
+  export function photographerFactory(data) {
   // Destructuring the data object to extract its properties
   const { name, id, city, country, tagline, price, portrait } = data;
 
