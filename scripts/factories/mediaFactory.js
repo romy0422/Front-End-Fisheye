@@ -1,13 +1,13 @@
-export function mediaFactory(data) {
+export function mediaFactory (data) {
   // Destructuring the data object to extract its properties
-  const { id, photographerId, title, image, video, likes } = data;
+  const { id, photographerId, title, image, video, likes } = data
 
   // Defining a function that will return a DOM element for the media card
-  function getMediaCardDOM() {
+  function getMediaCardDOM () {
     // Create an article element to contain the media card
-    const article = document.createElement("article");
-    article.className += "media-card";
-    article.id = id;
+    const article = document.createElement('article')
+    article.className += 'media-card'
+    article.id = id
 
     // If the media is an image add the appropriate media card html to the article element
     if (image) {
@@ -24,7 +24,7 @@ export function mediaFactory(data) {
           </button>
         </div>
       </section>
-    `;
+    `
     }
 
     // If the media is a video add the appropriate media card html to the article element
@@ -44,13 +44,13 @@ export function mediaFactory(data) {
           </button>
         </div>
       </section>
-    `;
+    `
     }
 
     // Return the article element
-    return article;
+    return article
   }
 
   // Returning an object with the getMediaCardDOM function
-  return { getMediaCardDOM };
+  return { getMediaCardDOM }
 }
