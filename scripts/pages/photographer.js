@@ -149,7 +149,7 @@ async function renderLightBoxMedia(mediaId) {
   // If the media is an image add the appropriate media card html to the lightboxMedia element
   if (image) {
     lightboxMedia.innerHTML = `
-      <img class="lightbox-img" src="assets/images/${photographerId}/${image}" alt="${title}">
+      <img class="lightbox-img" src="assets/images/${photographerId}/${image}" alt="${title}" aria-label="${title}" aria-description="ceci est une photographie intitulée : ${title}">
       <figcaption class="lightbox-caption">${title}</figcaption>
   `;
   }
@@ -158,7 +158,7 @@ async function renderLightBoxMedia(mediaId) {
   if (video) {
     lightboxMedia.innerHTML = `
       <video class="lightbox-video" title="${title}" controls>
-        <source src="assets/images/${photographerId}/${video}" type="video/mp4">
+        <source src="assets/images/${photographerId}/${video}" type="video/mp4" aria-label="${title}" aria-description="ceci est une vidéo intitulée : ${title}">
       </video>
       <figcaption class="lightbox-caption">${title}</figcaption>
   `;
@@ -303,6 +303,9 @@ function addEventListeners() {
   const contactBtn = document.getElementById("contactBtn");
   contactBtn.addEventListener("click", () => {
     displayModal("contactModal");
+    const focusInput = document.querySelector("input[name='firstName']");
+    focusInput.focus();
+    
   });
 
   // Add an event listener to the close button in the modal to close the contact modal on click

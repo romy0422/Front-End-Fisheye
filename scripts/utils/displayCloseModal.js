@@ -24,7 +24,7 @@ export function displayModal(modalName) {
     const header = document.querySelector("header");
     const main = document.querySelector("main");
     const footer = document.querySelector("footer");
-  
+
     // Close the modal
     modal.close();
     modal.style.display = "none";

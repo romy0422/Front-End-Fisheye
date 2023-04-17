@@ -26,6 +26,7 @@
     photographerImg.className += "photographer-img";
     photographerImg.setAttribute("src", picture);
     photographerImg.setAttribute("alt", `Photo de ${name}`);
+    photographerImg.setAttribute("aria-label", `Photo de ${name}`)
 
     // Create a heading element for the photographer name
     const photographerName = document.createElement("h2");

@@ -13,7 +13,7 @@ export function mediaFactory(data) {
     if (image) {
       article.innerHTML = `
       <button class="media-card-button" aria-label="Bouton d'ouverture de lightbox">
-        <img class="media-card-img" src="assets/images/${photographerId}/${image}" alt="${title}">
+        <img class="media-card-img" src="assets/images/${photographerId}/${image}" alt="${title}" aria-label="${title}" aria-description = "Ceci est une photographie">
       </button>
       <section class="media-card-info">
         <h2 class="media-card-title">${title}</h2>
@@ -31,7 +31,7 @@ export function mediaFactory(data) {
     if (video) {
       article.innerHTML = `
       <button class="media-card-button" aria-label="Bouton d'ouverture de lightbox">
-        <video class="media-card-video" title="${title}">
+        <video class="media-card-video" title="${title}"aria-label="${title}" aria-description="Ceci est une video">
           <source src="assets/images/${photographerId}/${video}" type="video/mp4">
         </video>
       </button>

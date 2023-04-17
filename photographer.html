@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="https://kit.fontawesome.com/daa790b88e.js" crossorigin="anonymous"></script>
-  
+
 </head>
 
 <body>
@@ -25,32 +25,32 @@
   <footer>
   </footer>
 
-  <dialog class="modal" id="contactModal" aria-hidden="true">
-    <header class="modal-header">
-      <h2 class="modal-title">Contactez-moi</h2>
-      <button class="modal-close" aria-label="Bouton de fermeture du modal de contact" id="modalCloseBtn">
-        <img class="modal-close-img" src="assets/icons/close-white.svg" alt="White close button icon">
-      </button>
-    </header>
-    <form class="modal-form" id="modalForm">
-      <label class="modal-label" for="firstName">Prénom</label><br>
-      <input class="modal-input" type="text" id="firstName" name="firstName" minlength="2" pattern="(?!^ +$)^.+$"
-        required><br>
+  <dialog class="modal" id="contactModal" aria-hidden="true" tabindex="0">
+      <header class="modal-header">
+        <h2 class="modal-title">Contactez-moi</h2>
+        <button class="modal-close" aria-label="Bouton de fermeture du modal de contact" id="modalCloseBtn">
+          <img class="modal-close-img" src="assets/icons/close-white.svg" alt="White close button icon">
+        </button>
+      </header>
+      <form class="modal-form" id="modalForm">
+        <label class="modal-label" for="firstName">Prénom</label><br>
+        <input class="modal-input" type="text" id="firstName" name="firstName" minlength="2" pattern="(?!^ +$)^.+$"
+          required><br>
 
-      <label class="modal-label" for="lastName">Nom</label><br>
-      <input class="modal-input" type="text" id="lastName" name="lastName" minlength="2" pattern="(?!^ +$)^.+$"
-        required><br>
+        <label class="modal-label" for="lastName">Nom</label><br>
+        <input class="modal-input" type="text" id="lastName" name="lastName" minlength="2" pattern="(?!^ +$)^.+$"
+          required><br>
 
-      <label class="modal-label" for="email">E-mail</label><br>
-      <input class="modal-input" type="email" id="email" name="email" required><br>
+        <label class="modal-label" for="email">E-mail</label><br>
+        <input class="modal-input" type="email" id="email" name="email" required><br>
 
-      <label class="modal-label" for="message">Votre message</label><br>
-      <input class="modal-input modal-msg" type="text" id="message" name="message" minlength="10" maxlength="100"
-        pattern="(?!^ +$)^.+$" required><br>
+        <label class="modal-label" for="message">Votre message</label><br>
+        <textarea class="modal-input modal-msg" type="textarea" id="message" name="message" minlength="10" maxlength="100"
+          pattern="(?!^ +$)^.+$" required></textarea><br>
 
-      <button class="button modal-submit" aria-label="Bouton de soumission du formulaire du modal de contact"
-        id="submitButton" type="submit">Envoyer</button>
-    </form>
+        <button class="button modal-submit" aria-label="Bouton de soumission du formulaire du modal de contact"
+          id="submitButton" type="submit">Envoyer</button>
+      </form>
   </dialog>
 
   <dialog class="lightbox" id="lightboxModal" aria-hidden="true">
