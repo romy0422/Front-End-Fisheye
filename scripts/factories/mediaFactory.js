@@ -31,7 +31,7 @@ export function mediaFactory (data) {
     if (video) {
       article.innerHTML = `
       <button class="media-card-button" aria-label="Bouton d'ouverture de lightbox">
-        <video class="media-card-video" title="${title}"aria-label="${title}" aria-description="Ceci est une video">
+        <video class="media-card-video" title="${title}" aria-label="${title}" aria-description="Ceci est une video">
           <source src="assets/images/${photographerId}/${video}" type="video/mp4">
         </video>
       </button>

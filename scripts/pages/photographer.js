@@ -73,7 +73,6 @@ function renderMediaSection (array) {
 function renderPhotographFooter (object) {
   // Destructuring the photographer info object to extract the photographer price
   const { price } = object
-
   // Calculate total media likes count and store it in a variable
   const mediaLikeCount = document.querySelectorAll('.media-like-count')
   let totalMediaLikeCount = 0
@@ -134,7 +133,7 @@ function validateModalForm (event) {
 async function renderLightBoxMedia (mediaId) {
   // Get the media object for the specified media id
   const mediaObject = await photographerMedia.find(
-    (media) => media.id === mediaId
+    (media) => media.id === parseInt(mediaId)
   )
 
   // Update the currentMediaId variable with the current lightbox media id
